@@ -21,24 +21,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
-    <LinearLayout
-        android:id="@+id/linear_layout_cambio_1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <include layout="@layout/content_time_line" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linear_layout_cambio_2"
-        android:layout_width="match_parent"
-        android:visibility="invisible"
-        android:layout_height="match_parent">
-
-        <include layout="@layout/tweet_raw" />
-    </LinearLayout>
+    <include layout="@layout/content_time_line" />
 
 
     <android.support.design.widget.FloatingActionButton

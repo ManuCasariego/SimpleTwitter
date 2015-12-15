@@ -1,10 +1,12 @@
 package com.ninguno.simpletwitter;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -14,7 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.twitter.sdk.android.Twitter;
@@ -28,7 +30,7 @@ import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 import io.fabric.sdk.android.Fabric;
 
 public class TimeLineActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener , TweetsFragment.OnFragmentInteractionListener {
 
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
     protected static final String TWITTER_KEY = "crj6OLzbtFeA1FiT7elfFCZmD";
@@ -37,9 +39,13 @@ public class TimeLineActivity extends AppCompatActivity
     public static final String USER_ID = "userId";
     private TwitterLoginButton loginButton;
     private long userId = 0L;
+    private FloatingActionButton fab;
+    private RelativeLayout relativeLayout;
 
-    private LinearLayout linearLayoutCambio1, linearLayoutCambio2;
+    @Override
+    public void onFragmentInteraction(Uri uri) {
 
+    }
 
     private enum LayoutMode {
         MODE1, MODE2, MODE3, MODE4
@@ -54,10 +60,11 @@ public class TimeLineActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_time_line);
 
+        relativeLayout = (RelativeLayout) findViewById(R.id.layout_fragment);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -71,8 +78,6 @@ public class TimeLineActivity extends AppCompatActivity
         initializeTwitterLogInButton();
 
 
-        linearLayoutCambio1 = (LinearLayout) findViewById(R.id.linear_layout_cambio_1);
-        linearLayoutCambio2 = (LinearLayout) findViewById(R.id.linear_layout_cambio_2);
         //initializeTwitterEmbedded();
     }
 
@@ -125,6 +130,7 @@ public class TimeLineActivity extends AppCompatActivity
             }
         });
 
+
     }
 
     @Override
@@ -173,16 +179,30 @@ public class TimeLineActivity extends AppCompatActivity
             startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
 
+
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
-            linearLayoutCambio1.setVisibility(View.VISIBLE);
-            linearLayoutCambio2.setVisibility(View.INVISIBLE);
             modeLayout = LayoutMode.MODE1;
+            relativeLayout.removeAllViews();
+            TweetsFragment tweetsFragment = TweetsFragment.newInstance("Hola que tal le diste a share", "caca");
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager
+                    .beginTransaction()
+                    .replace(R.id.layout_fragment, tweetsFragment)
+                    .commit();
+            fab.setVisibility(View.VISIBLE);
+
         } else if (id == R.id.nav_send) {
-            linearLayoutCambio1.setVisibility(View.INVISIBLE);
-            linearLayoutCambio2.setVisibility(View.VISIBLE);
             modeLayout = LayoutMode.MODE2;
+            relativeLayout.removeAllViews();
+            TweetsFragment tweetsFragment = TweetsFragment.newInstance("Hola que tal le diste a send", "caca");
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager
+                    .beginTransaction()
+                    .replace(R.id.layout_fragment, tweetsFragment)
+                    .commit();
+            fab.setVisibility(View.INVISIBLE);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
